@@ -1,27 +1,30 @@
+import { Button, Card } from 'antd';
+import Meta from 'antd/lib/card/Meta';
+import itemImg from 'assets/images/item.png';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 interface LandingPageProps {}
 
 const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
-  const { t } = useTranslation();
   return (
-    <>
-      <div className="landing">
-        <div className="landing_left-side">
-          <h1 className="landing__title">One live stream. 30+ destinations.</h1>
-          <span className="landing__desc">
-            Multistream & reach your audience, wherever they are.
-          </span>
-          <div className="landing__login-option-container">
-            <div className="landing__login-option">Continue with Google</div>
-            <div className="landing__login-option">Continue with Facebook</div>
-          </div>
-          <span>Or sign up with email</span>
+    <div className="container">
+      <div className="landing-content">
+        <div className="landing-content__header">
+          <span>DAILY DISCOVER</span>
         </div>
-        <div className="landing_right-side"></div>
+
+        <div className="landing__list-items">
+          {Array.from(Array(14), (_, index) => index + 1).map(() => (
+            <Card hoverable style={{ width: 190 }} cover={<img alt="example" src={itemImg} />}>
+              <Meta title="Europe Street beat" description="www.instagram.com" />
+            </Card>
+          ))}
+        </div>
+        <div className="landing__button-container">
+          <Button className="landing__button">See More</Button>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

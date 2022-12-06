@@ -1,4 +1,4 @@
-export interface LoginInformation {
+export interface AuthInformation {
   email: string;
   password: string;
   countryCode?: string;

@@ -4,11 +4,11 @@ import { Outlet, RouteProps } from 'react-router-dom';
 
 export const LandingLayout: React.FunctionComponent<RouteProps> = (props) => {
   return (
-    <div>
+    <div className="landing">
       <div>
         <LandingLayoutHeader />
       </div>
-      <div>
+      <div className="landing-body">
         <Outlet />
       </div>
       <div>

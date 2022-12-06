@@ -10,3 +10,26 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+.shop-logo {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+
+  img {
+    width: 45px;
+    height: 45px;
+  }
+  span {
+    font-size: 26px;
+    color: white;
+  }
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
