@@ -1,46 +1,174 @@
-# Getting Started with Create React App
+# Node & Npm version
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### `node v14.17.6`
 
-## Available Scripts
+### `npm v6.14.15`
+
+# Visual Code Extensions
+
+Before start the project, please install all of extensions below:
+
+1. `Bracket Pair Colorizer 2`
+2. `JavaScript (ES6) code snippets`
+3. `ESLint`
+4. `Prettier` (need set to default)
+5. `Material Icon Theme`
+6. `Typescript React code snippets`
+
+# Code Conventions
+
+Always organize import
+
+- Window: `Alt + Shift + O`
+- Mac: `Option + Shift + O`
+
+File name conventions:
+
+- API file name: `camelCase.ts`
+- Component file name: `PascalCase.tsx`
+- SCSS file name: `kebab-case.scss`
+- Util file name: `camelCase.ts`
+- Model file name: `camelCase.ts`
+- Slice file name: `camelCase.ts`
+- Config & Constant file name: `camelCase.ts`
+- Image file name: `lower_underscore_case.<jpeg|jpg|png>`
+
+Snippets:
+
+- Create component: `tsrsfc`
+
+# CSS Code Conventions
+
+Use `scss`\
+Use BEM (Block-Element-Modifier) style.
+
+# Struct of Project
+
+```
+│   .gitignore
+│   .prettierrc
+│   package.json
+│   README.md
+│   tsconfig.json
+│
+├───public
+│   │   favicon.ico
+│   │   index.html
+│   │   logo192.png
+│   │   logo512.png
+│   │   manifest.json
+│   │   robots.txt
+│   │
+│   └───locales
+│       ├───en
+│       │       translation.json
+│       │
+│       └───th
+│               translation.json
+│
+└───src
+    │   App.scss
+    │   App.test.tsx
+    │   App.tsx
+    │   index.scss
+    │   index.tsx
+    │   logo.svg
+    │   PrivateRoute.tsx
+    │   variables.scss
+    │
+    ├───api
+    │       axiosClient.ts
+    │       currencyApi.ts
+    │
+    ├───app
+    │       hooks.ts
+    │       store.ts
+    │
+    ├───components
+    │   ├───Common
+    │   │       Footer.tsx
+    │   │       Header.tsx
+    │   │       index.ts
+    │   │
+    │   ├───FormFields
+    │   │       index.ts
+    │   │       InputField.tsx
+    │   │
+    │   └───Layout
+    │           AccountLayout.tsx
+    │           index.ts
+    │
+    ├───config
+    │       i18n.ts
+    │
+    ├───constants
+    ├───features
+    │   └───account
+    │       │   accountSlice.ts
+    │       │
+    │       ├───components
+    │       ├───pages
+    │       │       DashboardPage.tsx
+    │       │
+    │       └───styles
+    ├───hooks
+    ├───models
+    │   │   common.ts
+    │   │   index.ts
+    │   │
+    │   └───ohlc
+    │           marketPriceSocket.ts
+    │
+    └───utils
+            commonUtil.ts
+            index.ts
+```
+
+# Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+#### `npm start`
 
-Runs the app in the development mode.\
+Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+#### `npm test`
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
+Launches the test runner in the interactive watch mode.<br />
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+#### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the app for production to the `build` folder.<br />
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Dispatch and Selector hooks
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Use `useAppDispatch` and `useAppSelector` instead of `useDispatch` and `useSelector`
 
-### `npm run eject`
+# Organize Form Module
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- Package: `React Hook Form`
+- Form Validation: `Yup`
+- Helper: `Validation Resolver`
+- Error Message: `ErrorMessage`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Principle:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- A Form contain many fields
+- Form field is the bridge between Form and UI control
+- UI control are `<input>`, `<select>` or custom components of UI library
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+    Pages/Container
+        ⭣
+    Form Component
+        ⭣
+    Form Fields (Base Controls)
+        ⭣
+    UI Control
+```
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- `Form Component`: Handle form validations and trigger callback on submit.
+- `Form Fields`: InputField, PhotoField, MapPickerField... A coordinator between form state and UI control.
+- `UI Control`: input, checkbox or a control from an external lib. A dump component which receives data from Form Field and render it accordingly.
