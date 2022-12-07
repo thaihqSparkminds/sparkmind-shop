@@ -29,7 +29,6 @@ const LoginPage: React.FunctionComponent<LoginPageProps> = (props) => {
     if (res) {
       dispatch(authActions.setIsLoggedIn(true));
       localStorage.setItem('token', res.token);
-      console.log(localStorage.getItem('token'));
       navigate('/');
     }
   }, []);
