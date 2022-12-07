@@ -1,14 +1,54 @@
+import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { Popover } from 'antd';
+import authApi from 'api/authApi';
+import paymentApi from 'api/paymentApi';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { CoinIcon } from 'components/Icons/CoinIcon';
 import { MainLogo } from 'components/Icons/MainLogo';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { ShoppingCartOutlined } from '@ant-design/icons';
+import { authActions, selectIsLoggedIn } from 'features/auth/authSlice';
+import React, { useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export interface LandingLayoutHeaderProps {}
 
 export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderProps> = (props) => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  const logout = useCallback(async () => {
+    const res = await authApi.logout(localStorage.getItem('token') || '');
+    if (res === 'success') {
+      dispatch(authActions.setIsLoggedIn(false));
+      localStorage.removeItem('token');
+      navigate('/login');
+    }
+  }, []);
+
+  const handleRecharge = async () => {
+    navigate('recharge');
+  };
+
+  const content = (
+    <>
+      <div className="auth-option">
+        Balance: <CoinIcon />
+      </div>
+      <div className="auth-option" onClick={handleRecharge}>
+        Recharge
+      </div>
+      <div className="auth-option" onClick={() => navigate('/user-detail')}>
+        Account Detail
+      </div>
+      <div className="auth-option" onClick={handleLogout}>
+        Log Out
+      </div>
+    </>
+  );
 
   return (
     <>
@@ -18,8 +58,8 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
             <MainLogo />
             <ul className="landing-header__nav-links">
               <li>
-                <Link style={{ color: 'white' }} to={'/product'}>
-                  Products
+                <Link style={{ color: 'white' }} to={'/wallet'}>
+                  Wallet
                 </Link>
               </li>
               <li>
@@ -40,9 +80,24 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
             </ul>
           </div>
           <div className="landing-header__right-side">
-            <ShoppingCartOutlined />
-            <button onClick={() => navigate('login')}>Log In</button>
-            <button onClick={() => navigate('register')}>Register</button>
+            {!token ? (
+              <>
+                <button onClick={() => navigate('login')}>Log In</button>
+                <button onClick={() => navigate('register')}>Register</button>
+              </>
+            ) : (
+              <>
+                <ShoppingCartOutlined />
+                <Popover
+                  placement="bottomRight"
+                  title={<span>Options</span>}
+                  content={content}
+                  trigger="click"
+                >
+                  <UserOutlined />
+                </Popover>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -14,6 +14,7 @@ export * from './user/user';
 
 /** Authentication */
 export * from './authentication/loginInformation';
+export * from './authentication/loginResponseInfo';
 
 /** Notification */
 

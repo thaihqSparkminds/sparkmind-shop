@@ -5,6 +5,7 @@ export interface AuthState {
   isLoggedIn: boolean;
   logging?: boolean;
   currentUser?: User;
+  token?: string;
 }
 
 const initialState: AuthState = {
@@ -30,6 +31,7 @@ export const authActions = authSlice.actions;
 // Selectors
 export const selectIsLoggedIn = (state: any) => state.auth.isLoggedIn;
 export const selectIsLogging = (state: any) => state.auth.logging;
+export const selectStates = (state: any) => state.auth;
 
 // Reducer
 const authReducer = authSlice.reducer;

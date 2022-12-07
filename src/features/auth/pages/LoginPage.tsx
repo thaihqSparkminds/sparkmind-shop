@@ -1,5 +1,9 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import authApi from 'api/authApi';
+import { useAppDispatch } from 'app/hooks';
+import { AuthInformation } from 'models';
+import React, { useCallback, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { authActions } from '../authSlice';
 import { AuthForm } from '../components/AuthForm';
 
 interface LoginPageProps {}
@@ -10,8 +14,28 @@ const initialValue = {
 };
 
 const LoginPage: React.FunctionComponent<LoginPageProps> = (props) => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [error, setError] = useState<string>('');
   const onSubmit = (values: any) => {
-    console.log('Success:', values);
+    handleLogin(values);
+  };
+
+  const handleLogin = useCallback(async (body: AuthInformation) => {
+    const res = await authApi.login(body).catch((error: any) => {
+      if (error.response) setError(error.response.data.message);
+    });
+
+    if (res) {
+      dispatch(authActions.setIsLoggedIn(true));
+      localStorage.setItem('token', res.token);
+      console.log(localStorage.getItem('token'));
+      navigate('/');
+    }
+  }, []);
+
+  const handleFail = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
   };
 
   return (
@@ -19,8 +43,14 @@ const LoginPage: React.FunctionComponent<LoginPageProps> = (props) => {
       <div className="login__header">
         <span>Login</span>
       </div>
+      {error && <div className="login__error">{error}</div>}
       <div className="container">
-        <AuthForm initialValue={initialValue} onSubmit={onSubmit} />
+        <AuthForm
+          initialValue={initialValue}
+          onSubmit={onSubmit}
+          onFail={handleFail}
+          submitType={'Login'}
+        />
       </div>
       <span className="login__nav-link">
         <Link to={'/register'}>Create a Sparkminds account</Link>

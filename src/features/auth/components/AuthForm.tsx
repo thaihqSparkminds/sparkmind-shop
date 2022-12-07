@@ -1,18 +1,22 @@
 import { Button, Form, Input } from 'antd';
 import { AuthInformation } from 'models';
+import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 
 export interface AuthFormProps {
   initialValue: AuthInformation;
   onSubmit: (formValues: AuthInformation) => void;
+  onFail?: (errorInfo: ValidateErrorEntity<AuthInformation>) => void;
+  submitType?: string;
 }
 
-export const AuthForm = ({ initialValue, onSubmit }: AuthFormProps) => {
+export const AuthForm = ({ initialValue, onSubmit, onFail, submitType }: AuthFormProps) => {
   return (
     <Form
       name="auth"
       initialValues={initialValue}
       layout="vertical"
       onFinish={onSubmit}
+      onFinishFailed={onFail}
       autoComplete="off"
     >
       <Form.Item
@@ -33,7 +37,7 @@ export const AuthForm = ({ initialValue, onSubmit }: AuthFormProps) => {
 
       <Form.Item>
         <Button type="primary" block danger htmlType="submit">
-          Submit
+          {submitType || 'Submit'}
         </Button>
       </Form.Item>
     </Form>
