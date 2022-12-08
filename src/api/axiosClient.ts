@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: process.env.BASE_GATEWAY_URL || 'http://localhost:8000',
+  baseURL: process.env.REACT_APP_BASE_GATEWAY_URL || 'http://localhost:8000',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -33,5 +33,13 @@ axiosClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const config = (token: string) => {
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
 
 export default axiosClient;

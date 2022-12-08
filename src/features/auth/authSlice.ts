@@ -5,7 +5,6 @@ export interface AuthState {
   isLoggedIn: boolean;
   logging?: boolean;
   currentUser?: User;
-  token?: string;
 }
 
 const initialState: AuthState = {

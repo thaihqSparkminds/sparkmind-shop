@@ -1,13 +1,6 @@
 import { AuthInformation, LoginResponseInformation } from 'models';
-import axiosClient from './axiosClient';
+import axiosClient, { config } from './axiosClient';
 
-const config = (token: string) => {
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-};
 
 const authApi = {
   login(body: AuthInformation): Promise<LoginResponseInformation> {

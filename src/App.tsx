@@ -3,7 +3,7 @@ import ForgotPasswordPage from 'features/auth/pages/ForgotPasswordPage';
 import LoginPage from 'features/auth/pages/LoginPage';
 import RegisterPage from 'features/auth/pages/RegisterPage';
 import VerifyAccountPage from 'features/auth/pages/VerifyAccountPage';
-import RechargePage from 'features/excharge/pages/RechargePage';
+import RechargeLayout from 'features/excharge/pages/RechargeLayout';
 import HomePage from 'features/home/pages/HomePage';
 import InmailPage from 'features/inmail/pages/InmailPage';
 import LandingPage from 'features/landing/pages/LandingPage';
@@ -26,7 +26,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
       <Routes>
         <Route path="/*" element={<LandingLayout />}>
           <Route path="" element={<LandingPage />} />
-          <Route path="recharge" element={<RechargePage />} />
+          <Route path="recharge/*" element={<RechargeLayout />} />
           <Route path="about" element={<AboutUsPage />} />
           <Route path="terms-and-conditions" element={<TermsConditionsPage />} />
           <Route path="privacy-policy" element={<PrivacyPolicyPage />} />

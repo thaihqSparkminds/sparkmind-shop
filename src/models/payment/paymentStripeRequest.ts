@@ -6,11 +6,11 @@ export interface PaymentStripeRequest {
       quantity: number;
       priceData: {
         currency: string;
-        unitAmount: 300;
+        unitAmount: number;
         productData: {
           name: string;
           description: string;
-          images: string[];
+          // images: string[];
         };
       };
     }

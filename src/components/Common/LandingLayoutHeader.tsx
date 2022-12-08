@@ -1,11 +1,10 @@
 import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Popover } from 'antd';
 import authApi from 'api/authApi';
-import paymentApi from 'api/paymentApi';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppDispatch } from 'app/hooks';
 import { CoinIcon } from 'components/Icons/CoinIcon';
 import { MainLogo } from 'components/Icons/MainLogo';
-import { authActions, selectIsLoggedIn } from 'features/auth/authSlice';
+import { authActions } from 'features/auth/authSlice';
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -21,7 +20,10 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
   };
 
   const logout = useCallback(async () => {
-    const res = await authApi.logout(localStorage.getItem('token') || '');
+    const res = await authApi.logout(localStorage.getItem('token') || '').catch(() => {
+      localStorage.removeItem('token');
+      navigate('/');
+    });
     if (res === 'success') {
       dispatch(authActions.setIsLoggedIn(false));
       localStorage.removeItem('token');
