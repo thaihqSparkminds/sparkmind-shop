@@ -1,9 +1,8 @@
-import { Button, Card } from 'antd';
+import { Card } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import productApi from 'api/productApi';
-import itemImg from 'assets/images/item.png';
 import { ProductInfo } from 'models/product/productInfo';
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface LandingPageProps {}
 
@@ -11,7 +10,7 @@ const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
   const [productInfo, setProductInfo] = useState<ProductInfo[] | null>(null);
 
   const getProduct = useCallback(async () => {
-    const res = await productApi.getAllProduct();
+    const res = await productApi.getAllProduct(localStorage.getItem('token') || '');
     if (res) setProductInfo(res);
   }, []);
 
@@ -39,11 +38,11 @@ const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
             ))}
         </div>
 
-        {productInfo && (
+        {/* {productInfo && (
           <div className="landing__button-container">
             <Button className="landing__button">See More</Button>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

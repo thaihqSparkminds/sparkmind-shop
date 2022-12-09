@@ -1,0 +1,24 @@
+.product-content {
+  flex: 1;
+  .product-content__header {
+    color: rgb(238, 77, 45);
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.9375rem 2.875rem;
+    text-align: center;
+    height: 3.75rem;
+    background-color: white;
+    border-bottom: solid 4px red;
+    margin-bottom: 10px;
+  }
+  .product__list-items {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    gap: 10px;
+  }
+
+  .product__button-container {
+    padding: 10px 0 20px;
+    text-align: center;
+  }
+}

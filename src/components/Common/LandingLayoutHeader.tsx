@@ -1,11 +1,15 @@
 import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Popover } from 'antd';
 import authApi from 'api/authApi';
-import { useAppDispatch } from 'app/hooks';
+import merchantApi from 'api/merchantApi';
+import userApi from 'api/userApi';
+import walletApi from 'api/walletApi';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { CoinIcon } from 'components/Icons/CoinIcon';
 import { MainLogo } from 'components/Icons/MainLogo';
-import { authActions } from 'features/auth/authSlice';
-import React, { useCallback } from 'react';
+import { authActions, selectIsLoggedIn } from 'features/auth/authSlice';
+import { UserInformation } from 'models/user/userInformation';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export interface LandingLayoutHeaderProps {}
@@ -14,10 +18,48 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const dispatch = useAppDispatch();
+  const [balance, setBalance] = useState(0);
+  const [userDetail, setUserDetail] = useState<UserInformation>();
+  const [isMerchant, setIsMerchant] = useState<boolean>(false);
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
 
-  const handleLogout = () => {
-    logout();
+  const getUserDetail = useCallback(async () => {
+    const res = await userApi.getUserDetail(localStorage.getItem('token') || '');
+    if (res) {
+      setUserDetail(res);
+    }
+  }, []);
+
+  useEffect(() => {
+    getUserDetail();
+    checkIsMerchant();
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) checkIsMerchant();
+  }, [isLoggedIn]);
+
+  const getBalance = useCallback(async () => {
+    const token = localStorage.getItem('token') || '';
+    const res = await walletApi.getWallet(token);
+    if (res) {
+      setBalance(res.balance);
+    }
+  }, []);
+
+  const handlePopover = () => {
+    getBalance();
+    getUserDetail();
+    checkIsMerchant();
   };
+
+  const checkIsMerchant = useCallback(async () => {
+    const token = localStorage.getItem('token') || '';
+    const res = await merchantApi.checkIsMerchant(token);
+    if (res) {
+      setIsMerchant(res);
+    } else setIsMerchant(res);
+  }, []);
 
   const logout = useCallback(async () => {
     const res = await authApi.logout(localStorage.getItem('token') || '').catch(() => {
@@ -28,25 +70,35 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
       dispatch(authActions.setIsLoggedIn(false));
       localStorage.removeItem('token');
       navigate('/login');
+    } else {
+      localStorage.removeItem('token');
+      navigate('/');
     }
   }, []);
-
-  const handleRecharge = async () => {
-    navigate('recharge');
-  };
 
   const content = (
     <>
       <div className="auth-option">
-        Balance: <CoinIcon />
+        Balance:{' '}
+        <span>
+          <CoinIcon /> {balance}
+        </span>
       </div>
-      <div className="auth-option" onClick={handleRecharge}>
+      <div className="auth-option" onClick={() => navigate('merchant')}>
+        <span>Merchant: </span>
+        {isMerchant ? (
+          <span style={{ color: '#00F295' }}>Registered</span>
+        ) : (
+          <span style={{ color: '#ccc' }}>Unregistered</span>
+        )}
+      </div>
+      <div className="auth-option" onClick={() => navigate('recharge')}>
         Recharge
       </div>
-      <div className="auth-option" onClick={() => navigate('/user-detail')}>
+      <div className="auth-option" onClick={() => navigate('user-detail')}>
         Account Detail
       </div>
-      <div className="auth-option" onClick={handleLogout}>
+      <div className="auth-option" onClick={logout}>
         Log Out
       </div>
     </>
@@ -69,11 +121,13 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
                   About
                 </Link>
               </li>
-              <li>
-                <Link style={{ color: 'white' }} to={'/customer'}>
-                  Customers
-                </Link>
-              </li>
+              {token && isMerchant && (
+                <li>
+                  <Link style={{ color: 'white' }} to={'/product'}>
+                    Products
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link style={{ color: 'white' }} to={'/price'}>
                   Pricing
@@ -91,8 +145,9 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
               <>
                 <ShoppingCartOutlined />
                 <Popover
+                  onVisibleChange={handlePopover}
                   placement="bottomRight"
-                  title={<span>Options</span>}
+                  title={<span>{userDetail?.email}</span>}
                   content={content}
                   trigger="click"
                 >

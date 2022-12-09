@@ -1,16 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { User } from 'models';
+import { UserInformation } from 'models/user/userInformation';
 
 export interface AuthState {
   isLoggedIn: boolean;
   logging?: boolean;
   currentUser?: User;
+  isMerchant?: boolean;
 }
 
 const initialState: AuthState = {
   isLoggedIn: false,
   logging: false,
   currentUser: undefined,
+  isMerchant: false,
 };
 
 const authSlice = createSlice({
@@ -19,6 +22,9 @@ const authSlice = createSlice({
   reducers: {
     setIsLoggedIn(state, action) {
       state.isLoggedIn = action.payload;
+    },
+    setIsMerchant(state, action) {
+      state.isMerchant = action.payload;
     },
   },
   extraReducers: {},

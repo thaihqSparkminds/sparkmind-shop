@@ -7,6 +7,8 @@ import RechargeLayout from 'features/excharge/pages/RechargeLayout';
 import HomePage from 'features/home/pages/HomePage';
 import InmailPage from 'features/inmail/pages/InmailPage';
 import LandingPage from 'features/landing/pages/LandingPage';
+import MerchantLayout from 'features/merchant/layout/MerchantLayout';
+import ProductPage from 'features/product/pages/ProductPage';
 import SettingPage from 'features/setting/pages/SettingPage';
 import AboutUsPage from 'features/static/pages/AboutUsPage';
 import AMLCTPFPolicyPage from 'features/static/pages/AMLCTPFPolicyPage';
@@ -27,6 +29,8 @@ const App: React.FunctionComponent<AppProps> = (props) => {
         <Route path="/*" element={<LandingLayout />}>
           <Route path="" element={<LandingPage />} />
           <Route path="recharge/*" element={<RechargeLayout />} />
+          <Route path="merchant/*" element={<MerchantLayout />} />
+          <Route path="product" element={<ProductPage />} />
           <Route path="about" element={<AboutUsPage />} />
           <Route path="terms-and-conditions" element={<TermsConditionsPage />} />
           <Route path="privacy-policy" element={<PrivacyPolicyPage />} />

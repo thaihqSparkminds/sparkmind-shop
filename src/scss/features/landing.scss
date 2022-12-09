@@ -1,6 +1,9 @@
 .auth-option {
   padding: 10px 5px;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+
   &:hover {
     background-color: #fafafa;
   }
