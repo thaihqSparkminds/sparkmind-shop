@@ -1,13 +1,15 @@
-import { Button, Card, Form, Input, Modal } from 'antd';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Card } from 'antd';
 import Meta from 'antd/lib/card/Meta';
-import merchantApi from 'api/merchantApi';
 import productApi from 'api/productApi';
+import { ModalComponent } from 'components/Common/ModalComponent';
 import { ProductInfo } from 'models/product/productInfo';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import ProductForm from '../components/ProductForm';
 
 interface ProductPageProps {}
 
-const formField = {
+export const productFormField = {
   name: 'name',
   description: 'description',
   images: 'images',
@@ -17,7 +19,12 @@ const formField = {
 
 const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
   const [productInfo, setProductInfo] = useState<ProductInfo[] | null>(null);
-  const [openModal, setOpenModal] = useState(false);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [productDeleteSelected, setProductDeleteSelected] = useState<number | undefined>(0);
+  const token = useRef(localStorage.getItem('token')).current || '';
+  const [productUpdateField, setProductUpdateField] = useState<ProductInfo>();
 
   const getProduct = useCallback(async () => {
     const res = await productApi.getAllPrivateProduct(localStorage.getItem('token') || '');
@@ -29,25 +36,28 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
   }, []);
 
   const handleToggleModal = () => {
-    setOpenModal(true);
+    setOpenCreateModal(true);
   };
 
-  const handleCreate = (data: ProductInfo) => {
-    createProduct(data);
+  const handleEdit = (id: number | undefined) => {
+    getProductDetail(id);
+    setOpenEditModal(true);
   };
 
-  const createProduct = useCallback(async (data: ProductInfo) => {
-    const token = localStorage.getItem('token') || '';
-    const merchant = await merchantApi.getMerchant(token);
-    console.log(merchant);
-    const res = await productApi.createProduct(token, {
-      ...data,
-      images: [data.images[0]],
-      merchantId: Number(merchant.id),
-    });
+  const handleDelete = (id: number | undefined) => {
+    setProductDeleteSelected(id);
+    setOpenDeleteModal(true);
+  };
+
+  const deleteProduct = useCallback(async (id) => {
+    await productApi.deleteProduct(token, id);
+    getProduct();
+  }, []);
+
+  const getProductDetail = useCallback(async (id) => {
+    const res = await productApi.getProduct(token, id);
     if (res) {
-      setOpenModal(false);
-      getProduct();
+      setProductUpdateField(res);
     }
   }, []);
 
@@ -74,8 +84,13 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
           {productInfo &&
             productInfo.map((e, i) => (
               <Card
-                hoverable
+                key={e.id}
                 style={{ width: 190 }}
+                hoverable
+                actions={[
+                  <EditOutlined onClick={() => handleEdit(e.id)} key="edit" />,
+                  <DeleteOutlined onClick={() => handleDelete(e.id)} key="delete" />,
+                ]}
                 cover={<img alt="example" src={e.images[0]} />}
               >
                 <Meta title={e.name} description={e.price} />
@@ -83,44 +98,29 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
             ))}
         </div>
 
-        <Modal
-          visible={openModal}
-          onOk={() => setOpenModal(false)}
-          onCancel={() => setOpenModal(false)}
-          footer={null}
-        >
-          <h1>Create product</h1>
-          <Form
-            name="recharge"
-            initialValues={{}}
-            layout="vertical"
-            onFinish={handleCreate}
-            autoComplete="off"
-            className="product__form"
-          >
-            {Object.values(formField).map((e, i) => (
-              <Form.Item
-                label={e}
-                name={Object.keys(formField)[i]}
-                rules={[{ required: true, message: `${e} is required` }]}
-              >
-                <Input />
-              </Form.Item>
-            ))}
+        <ProductForm
+          visible={openCreateModal}
+          setOpenModal={setOpenCreateModal}
+          getProduct={getProduct}
+          isUpdateForm={false}
+          rules
+        />
 
-            <Form.Item>
-              <Button type="primary" size={'large'} block danger htmlType="submit">
-                Create
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
+        <ProductForm
+          visible={openEditModal}
+          setOpenModal={setOpenEditModal}
+          getProduct={getProduct}
+          isUpdateForm={true}
+          productUpdateField={productUpdateField}
+        />
 
-        {/* {productInfo && (
-          <div className="product__button-container">
-            <Button className="product__button">See More</Button>
-          </div>
-        )} */}
+        <ModalComponent
+          openModal={openDeleteModal}
+          title={'Delete Product'}
+          onOk={() => deleteProduct(productDeleteSelected)}
+          setOpenModal={setOpenDeleteModal}
+          description={'Do you want to delete this product'}
+        />
       </div>
     </div>
   );

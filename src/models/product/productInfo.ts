@@ -4,6 +4,6 @@ export interface ProductInfo {
   description: string;
   images: string[];
   price: number;
-  merchantId: number;
+  merchantId?: number;
   category: string;
 }

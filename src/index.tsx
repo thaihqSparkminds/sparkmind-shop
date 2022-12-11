@@ -11,15 +11,13 @@ import './scss/app.scss';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <Suspense fallback={<Loading />}>
-          <App />
-        </Suspense>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <Suspense fallback={<Loading />}>
+        <App />
+      </Suspense>
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('root')
 );
 
