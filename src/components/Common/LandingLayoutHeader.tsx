@@ -1,5 +1,5 @@
 import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
-import { Popover } from 'antd';
+import { Badge, Popover } from 'antd';
 import authApi from 'api/authApi';
 import merchantApi from 'api/merchantApi';
 import userApi from 'api/userApi';
@@ -123,7 +123,7 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
               </li>
               {token && isMerchant && (
                 <li>
-                  <Link style={{ color: 'white' }} to={'/product'}>
+                  <Link style={{ color: 'white' }} to={'/products'}>
                     Products
                   </Link>
                 </li>
@@ -144,6 +144,7 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
             ) : (
               <>
                 <ShoppingCartOutlined />
+
                 <Popover
                   onVisibleChange={handlePopover}
                   placement="bottomRight"

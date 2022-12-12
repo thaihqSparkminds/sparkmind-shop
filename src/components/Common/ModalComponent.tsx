@@ -27,7 +27,7 @@ export const ModalComponent: React.FunctionComponent<ModalComponentProps> = ({
     setOpenModal(false);
   };
   return (
-    <Modal title={title} visible={openModal} onOk={handleOk} onCancel={handleCancel}>
+    <Modal centered title={title} visible={openModal} onOk={handleOk} onCancel={handleCancel}>
       <p>{description}</p>
     </Modal>
   );

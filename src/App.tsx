@@ -1,15 +1,12 @@
-import { LandingLayout, ProductLayout } from 'components/Layout';
+import { LandingLayout } from 'components/Layout';
 import ForgotPasswordPage from 'features/auth/pages/ForgotPasswordPage';
 import LoginPage from 'features/auth/pages/LoginPage';
 import RegisterPage from 'features/auth/pages/RegisterPage';
 import VerifyAccountPage from 'features/auth/pages/VerifyAccountPage';
 import RechargeLayout from 'features/excharge/pages/RechargeLayout';
-import HomePage from 'features/home/pages/HomePage';
-import InmailPage from 'features/inmail/pages/InmailPage';
 import LandingPage from 'features/landing/pages/LandingPage';
 import MerchantLayout from 'features/merchant/layout/MerchantLayout';
-import ProductPage from 'features/product/pages/ProductPage';
-import SettingPage from 'features/setting/pages/SettingPage';
+import ProductLayout from 'features/product/layout/ProductLayout';
 import AboutUsPage from 'features/static/pages/AboutUsPage';
 import AMLCTPFPolicyPage from 'features/static/pages/AMLCTPFPolicyPage';
 import BuySellRulePage from 'features/static/pages/BuySellRulePage';
@@ -30,7 +27,7 @@ const App: React.FunctionComponent<AppProps> = (props) => {
           <Route path="" element={<LandingPage />} />
           <Route path="recharge/*" element={<RechargeLayout />} />
           <Route path="merchant/*" element={<MerchantLayout />} />
-          <Route path="product" element={<ProductPage />} />
+          <Route path="products/*" element={<ProductLayout />} />
           <Route path="about" element={<AboutUsPage />} />
           <Route path="terms-and-conditions" element={<TermsConditionsPage />} />
           <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
@@ -41,13 +38,6 @@ const App: React.FunctionComponent<AppProps> = (props) => {
           <Route path="register" element={<RegisterPage />} />
           <Route path="reset-password" element={<ForgotPasswordPage />} />
           <Route path="verify-account" element={<VerifyAccountPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-
-        <Route path="/my/*" element={<ProductLayout />}>
-          <Route path="home" element={<HomePage />} />
-          <Route path="setting" element={<SettingPage />} />
-          <Route path="inmail" element={<InmailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
 

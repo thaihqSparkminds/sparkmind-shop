@@ -25,8 +25,11 @@ const RechargePage: React.FunctionComponent<RechargePageProps> = (props) => {
               currency: 'usd',
               unitAmount: 100,
               productData: {
-                name: 'SM',
-                description: 'Sparkminds Coin',
+                name: 'USDT',
+                description: 'USD TETHER',
+                images: [
+                  'https://www.pngall.com/wp-content/uploads/10/USD-Coin-Logo-PNG-Images.png',
+                ],
               },
             },
           },

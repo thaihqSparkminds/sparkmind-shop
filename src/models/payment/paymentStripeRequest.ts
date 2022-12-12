@@ -10,7 +10,7 @@ export interface PaymentStripeRequest {
         productData: {
           name: string;
           description: string;
-          // images: string[];
+          images: string[];
         };
       };
     }
