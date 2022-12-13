@@ -2,13 +2,13 @@ import { ProductInfo } from 'models/product/productInfo';
 import axiosClient, { config } from './axiosClient';
 
 const productApi = {
-  getProduct(token: string, id: number): Promise<ProductInfo> {
+  getProduct(id: number): Promise<ProductInfo> {
     const url = `/products/${id}`;
-    return axiosClient.get(url, config(token));
+    return axiosClient.get(url);
   },
-  getAllProduct(token: string): Promise<ProductInfo[]> {
+  getAllProduct(): Promise<ProductInfo[]> {
     const url = `/products`;
-    return axiosClient.get(url, config(token));
+    return axiosClient.get(url);
   },
   getAllPrivateProduct(token: string): Promise<ProductInfo[]> {
     const url = `/products/private`;

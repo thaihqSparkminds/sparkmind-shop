@@ -12,7 +12,7 @@ const LandingPage: React.FunctionComponent<LandingPageProps> = (props) => {
   const navigate = useNavigate();
 
   const getProduct = useCallback(async () => {
-    const res = await productApi.getAllProduct(localStorage.getItem('token') || '');
+    const res = await productApi.getAllProduct();
     if (res) setProductInfo(res);
   }, []);
 

@@ -1,13 +1,14 @@
 import { Modal } from 'antd';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 interface ModalComponentProps {
   openModal: boolean;
-  title: string;
+  title?: string;
   onOk: () => void;
   onCancel?: () => void;
   setOpenModal: (value: boolean) => void;
-  description: string;
+  description?: string | ReactNode;
+  noFooter?: true;
 }
 
 export const ModalComponent: React.FunctionComponent<ModalComponentProps> = ({
@@ -17,6 +18,7 @@ export const ModalComponent: React.FunctionComponent<ModalComponentProps> = ({
   onCancel,
   setOpenModal,
   description,
+  noFooter,
 }) => {
   const handleOk = () => {
     onOk();
@@ -27,8 +29,29 @@ export const ModalComponent: React.FunctionComponent<ModalComponentProps> = ({
     setOpenModal(false);
   };
   return (
-    <Modal centered title={title} visible={openModal} onOk={handleOk} onCancel={handleCancel}>
-      <p>{description}</p>
-    </Modal>
+    <>
+      {!noFooter ? (
+        <Modal
+          centered
+          title={title && title}
+          visible={openModal}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          {typeof description == 'string' ? <p>{description}</p> : description}
+        </Modal>
+      ) : (
+        <Modal
+          footer={null}
+          centered
+          title={title && title}
+          visible={openModal}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          {typeof description == 'string' ? <p>{description}</p> : description}
+        </Modal>
+      )}
+    </>
   );
 };

@@ -55,7 +55,7 @@ const ProductPage: React.FunctionComponent<ProductPageProps> = (props) => {
   }, []);
 
   const getProductDetail = useCallback(async (id) => {
-    const res = await productApi.getProduct(token, id);
+    const res = await productApi.getProduct(id);
     if (res) {
       setProductUpdateField(res);
     }
