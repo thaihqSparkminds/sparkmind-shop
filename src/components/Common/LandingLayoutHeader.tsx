@@ -41,11 +41,11 @@ export const LandingLayoutHeader: React.FunctionComponent<LandingLayoutHeaderPro
 
   const getBalance = useCallback(async () => {
     const token = localStorage.getItem('token') || '';
-    const res = await walletApi.getWallet(token);
+    const res = await walletApi.getWallet(token).catch(() => setBalance(0));
     if (res) {
       setBalance(res.balance);
     }
-  }, []);
+  }, [localStorage.getItem('token')]);
 
   const handlePopover = () => {
     getBalance();
