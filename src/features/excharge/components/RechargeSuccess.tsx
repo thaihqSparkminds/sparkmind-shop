@@ -1,9 +1,6 @@
 import { CheckCircleFilled } from '@ant-design/icons';
 import { Button } from 'antd';
-import paymentApi from 'api/paymentApi';
-import userApi from 'api/userApi';
-import walletApi from 'api/walletApi';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export interface RechargeSuccessProps {}
@@ -11,33 +8,6 @@ export interface RechargeSuccessProps {}
 const RechargeSuccess: React.FunctionComponent<RechargeSuccessProps> = (props) => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    (async () => {
-      const sessionId = localStorage.getItem('checkoutSessionId') || '';
-      const token = localStorage.getItem('token') || '';
-      const res = await paymentApi.checkPaymentStatus(sessionId, token);
-      const userDetail = await userApi.getUserDetail(token);
-      if (res.status === 'paid') {
-        const wallet = await walletApi.getWallet(token).catch(async (error) => {
-          await walletApi.createWallet(token, {
-            balance: res.amountTotal,
-            blockedBalance: 0,
-            coin: {
-              name: 'SM',
-              shortName: 'Sparkminds Coin',
-            },
-            userId: userDetail.userId,
-          });
-        });
-        if (wallet) {
-          await walletApi.updateWalletBalance(token, {
-            ...wallet,
-            balance: wallet.balance + res.amountTotal,
-          });
-        }
-      }
-    })();
-  }, []);
   return (
     <div className="container">
       <div className="recharge">

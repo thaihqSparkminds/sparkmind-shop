@@ -25,8 +25,8 @@ const RechargePage: React.FunctionComponent<RechargePageProps> = (props) => {
               currency: 'usd',
               unitAmount: 100,
               productData: {
-                name: 'USDT',
-                description: 'USD TETHER',
+                name: 'USDC',
+                description: 'USD Coin',
                 images: [
                   'https://www.pngall.com/wp-content/uploads/10/USD-Coin-Logo-PNG-Images.png',
                 ],
